@@ -1,11 +1,11 @@
 exports.allAccess = (req, res) => {
-    res.status(200).send("Public Content.");
+    res.status(200).send("user.controller.js: Return Public content here");
 };
 
 exports.userBoard = (req, res) => {
-    res.status(200).send("User Content.");
+    res.status(200).send("user.controller.js: Return User content here");
 };
 
 exports.adminBoard = (req, res) => {
-    res.status(200).send("Admin Content.");
+    res.status(200).send("user.controller.js: Return Admin content here");
 };

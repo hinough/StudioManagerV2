@@ -1,5 +1,14 @@
 var config = require('./config'); //Configfile
 
+var fs = require('fs');
+var http = require('http');
+var https = require('https');
+var privateKey = fs.readFileSync('sslcert/key.pem', 'utf8');
+var certificate = fs.readFileSync('sslcert/cert.pem', 'utf8');
+
+var credentials = {key: privateKey, cert: certificate};
+
+
 //NPM Modules
 const bodyParser = require('body-parser'); //For easy body parsing and generating
 const cors = require('cors'); //To enable CORS
@@ -8,7 +17,7 @@ const express = require('express'); //For API
 const app = express();
 
 var corsOptions = {
-    origin: 'http://192.167.1.57:3001'
+    origin: 'http://172.29.192.30:3001'
 };
 
 app.use(cors(corsOptions));
@@ -34,9 +43,13 @@ app.get('/', (req, res) => {
 require("./routes/auth.routes")(app);
 require("./routes/user.routes")(app);
 
-app.listen(config.web.port, () => {
-    console.log('Webserver live. Listening to http://192.168.1.57:' + config.web.port);
-});
+/*app.listen(config.web.port, () => {
+    console.log('Webserver live. Listening to http://172.29.192.30:' + config.web.port);
+});*/
+
+var httpsServer = https.createServer(credentials, app);
+
+httpsServer.listen(config.web.port);
 
 
 function initial() {

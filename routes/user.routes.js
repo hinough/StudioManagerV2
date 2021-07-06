@@ -21,4 +21,6 @@ module.exports = function(app) {
         "/api/test/admin", [authJwt.verifyToken, authJwt.isAdmin],
         controller.adminBoard
     );
+
+    app.post("/api/test/user", [authJwt.verifyToken], controller.userBoard);
 };
