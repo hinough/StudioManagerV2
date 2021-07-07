@@ -25,4 +25,7 @@ module.exports = function(app) {
     app.post("/api/test/user", [authJwt.verifyToken], controller.userBoard);
 
     app.post("/api/user/addCustomer", [authJwt.verifyToken], controller.addCustomer);
+    app.post("/api/user/findCustomers", [authJwt.verifyToken], controller.findCustomers);
+    app.post("/api/user/findCustomersById/:id", [authJwt.verifyToken], controller.findCustomersById);
+    app.post("/api/user/findCustomersByName/:name", [authJwt.verifyToken], controller.findCustomersByName);
 };
