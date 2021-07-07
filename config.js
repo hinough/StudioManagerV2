@@ -12,7 +12,7 @@ config.web = {};
 config.auth.secret = '186bf36d-375a-4546-9770-808d1ec15511'; //Generated secret key
 
 config.database.database = 'studio_manager'; //default database to connect to
-config.database.host = '172.29.192.30'; //host for database
+config.database.host = '192.168.1.57'; //host for database
 config.database.password = '13121991'; //database password
 config.database.username = 'kroger'; //database username
 config.database.dialect = 'mysql';
