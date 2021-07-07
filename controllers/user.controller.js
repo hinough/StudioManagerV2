@@ -2,7 +2,7 @@ const db = require('../models');
 const config = require('../config');
 
 const Customer = db.customer;
-const {and} = db.Sequelize.Op;
+const {or} = db.Sequelize.Op;
 
 exports.allAccess = (req, res) => {
     res.status(200).send({
@@ -40,29 +40,15 @@ exports.addCustomer = (req, res) => {
     });
 };
 
-//Find customer by ID
-exports.findCustomersById = (req, res) => {
+//Find customer by ID or Name
+exports.findCustomersByKey = (req, res) => {
     Customer.findAll({
         where: {
-            id: req.params.id
-        }
-    }).then(customers => {
-        if(customers.length === 0) {
-            res.status(404).send({ message: "Specified customer not found"})
-        }
-        else {
-            res.status(200).json(customers);
-        }
-    }).catch(err => {
-        res.status(500).send({ message: err.message});
-    });
-};
-
-//Find customer by Name
-exports.findCustomersByName = (req, res) => {
-    Customer.findAll({
-        where: {
-            name: req.params.name
+            [or]: {
+                id: req.params.key,
+                name: req.params.key
+            },
+            userId: req.userId
         }
     }).then(customers => {
         if(customers.length === 0) {
