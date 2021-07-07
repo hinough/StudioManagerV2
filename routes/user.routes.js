@@ -28,4 +28,6 @@ module.exports = function(app) {
     app.post("/api/user/findCustomers", [authJwt.verifyToken], controller.findCustomers);
     app.post("/api/user/findCustomersById/:id", [authJwt.verifyToken], controller.findCustomersById);
     app.post("/api/user/findCustomersByName/:name", [authJwt.verifyToken], controller.findCustomersByName);
+
+    app.delete("/api/user/removeCustomer/:id", [authJwt.verifyToken], controller.removeCustomer);
 };

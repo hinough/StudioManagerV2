@@ -2,8 +2,7 @@ const db = require('../models');
 const config = require('../config');
 
 const Customer = db.customer;
-
-const {or} = db.Sequelize.Op;
+const {and} = db.Sequelize.Op;
 
 exports.allAccess = (req, res) => {
     res.status(200).send({
@@ -41,28 +40,39 @@ exports.addCustomer = (req, res) => {
     });
 };
 
-//Find spesific customer from ID or Name
+//Find customer by ID
 exports.findCustomersById = (req, res) => {
     Customer.findAll({
         where: {
             id: req.params.id
         }
     }).then(customers => {
-        res.json(customers);
+        if(customers.length === 0) {
+            res.status(404).send({ message: "Specified customer not found"})
+        }
+        else {
+            res.status(200).json(customers);
+        }
     }).catch(err => {
-        res.send({ message: err.message});
+        res.status(500).send({ message: err.message});
     });
 };
 
+//Find customer by Name
 exports.findCustomersByName = (req, res) => {
     Customer.findAll({
         where: {
             name: req.params.name
         }
     }).then(customers => {
-        res.json(customers);
+        if(customers.length === 0) {
+            res.status(404).send({ message: "Specified customer not found"})
+        }
+        else {
+            res.status(200).json(customers);
+        }
     }).catch(err => {
-        res.send({ message: err.message});
+        res.status(500).send({ message: err.message});
     });
 };
 
@@ -73,8 +83,32 @@ exports.findCustomers = (req, res) => {
             userId: req.userId
         }
     }).then(customers => {
-        res.json(customers);
+        if(customers.length === 0) {
+            res.status(404).send({ message: "User has no customers!"})
+        }
+        else {
+            res.status(200).json(customers);
+        }
     }).catch(err => {
-        res.send({ message: err.message});
+        res.status(500).send({ message: err.message});
+    });
+};
+
+//Remove one customer from ID (Requires valid token and unique ID)
+exports.removeCustomer = (req, res) => {
+    Customer.destroy({
+        where: {
+            id: req.params.id,
+            userId: req.userId
+        }
+    }).then(amount => {
+        if(amount === 0) {
+            res.status(404).send({ message: "Specified customer not found"})
+        }
+        else {
+            res.status(200).send({ message: "ok"});
+        }
+    }).catch(err => {
+        res.status(500).send({ message: err.message});
     });
 };
