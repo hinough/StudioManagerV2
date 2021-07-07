@@ -23,4 +23,6 @@ module.exports = function(app) {
     );
 
     app.post("/api/test/user", [authJwt.verifyToken], controller.userBoard);
+
+    app.post("/api/user/addCustomer", [authJwt.verifyToken], controller.addCustomer);
 };

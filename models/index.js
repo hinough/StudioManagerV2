@@ -24,8 +24,9 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
-db.user = require("./user.model.js")(sequelize, Sequelize);
+db.user = require('./user.model.js')(sequelize, Sequelize);
 db.role = require('./role.model.js')(sequelize, Sequelize);
+db.customer = require('./customer.model.js')(sequelize, Sequelize);
 
 db.role.belongsToMany(db.user, {
     through: "user_roles",
@@ -37,6 +38,11 @@ db.user.belongsToMany(db.role, {
     through: "user_roles",
     foreignKey: "userId",
     otherKey: "roleId"
+});
+
+db.user.hasMany(db.customer);
+db.customer.belongsTo(db.user, {
+    foreignKey: "userId"
 });
 
 db.ROLES = ["User", "Administrator"];
