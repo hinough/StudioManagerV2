@@ -27,30 +27,28 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const db = require('./models');
 const Role = db.role;
 
-//In live we dont need to drop and reload the database
-//db.sequelize.sync();
-
-db.sequelize.sync({ force: true }).then(() => {
-    console.log('Dropping and reloading database');
-    initial();
-});
-
+//If CLI argument "FIRSTINSTALL" is given, DB is dropped and refreshed
+if(process.argv[2] === "CLEAN") {
+    db.sequelize.sync({ force: true }).then(() => {
+        console.log('Database dropped and cleanly installed');
+        initial();
+    });
+}//Else its just started as is with data
+else {
+    db.sequelize.sync();
+}
 
 app.get('/', (req, res) => {
-    res.json({ message: 'Webserver is live. Welcome!' });
+    res.status(200).send("<img src=https://media1.tenor.com/images/429441c6065986233600cecf6fa3a6f3/tenor.gif?itemid=17646607></img>");
 });
 
 require("./routes/auth.routes")(app);
 require("./routes/user.routes")(app);
 
-/*app.listen(config.web.port, () => {
-    console.log('Webserver live. Listening to http://172.29.192.30:' + config.web.port);
-});*/
-
 var httpsServer = https.createServer(credentials, app);
 
 httpsServer.listen(config.web.port);
-
+console.log("Server live and listening to port " + config.web.port);
 
 function initial() {
     Role.create({
